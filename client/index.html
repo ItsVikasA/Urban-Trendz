@@ -4,14 +4,26 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="./src/index.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Title for tab and Google -->
     <title>Urban Trendz Online Store</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/jpg" href="/logo.jpg" />
+    <!-- Favicon (make sure logo.jpg or logo.png exists in /public) -->
+    <link rel="icon" type="image/png" href="/logo.png" />
 
+    <!-- SEO Meta Description -->
+    <meta name="description" content="Urban Trendz Mudhol Shopping - Discover trendy fashion and affordable deals on the best shopping platform in Mudhol." />
+
+    <!-- Open Graph Tags for SEO & social preview -->
+    <meta property="og:title" content="Urban Trendz Online Store" />
+    <meta property="og:description" content="Shop fashion, electronics, and more at Urban Trendz Mudhol Shopping. Easy login, fast checkout." />
+    <meta property="og:image" content="/logo.png" />
+    <meta property="og:url" content="https://urbantrendzmdl.com" />
+    <meta property="og:type" content="website" />
+
+    <!-- Font Styling -->
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
-
       .outfit-font {
         font-family: "Outfit", sans-serif;
         font-optical-sizing: auto;
@@ -20,14 +32,17 @@
       }
     </style>
   </head>
+
   <body class="bg-gray-900">
-    <!-- Optional logo at top of page (not in title bar) -->
+    <!-- Optional visible logo (commented out) -->
     <!-- <div class="flex justify-center py-4">
-      <img src="/favicon.png" alt="Logo" class="h-12" />
+      <img src="/logo.png" alt="Logo" class="h-12" />
     </div> -->
 
+    <!-- React root -->
     <div class="outfit-font" id="root"></div>
 
+    <!-- Scripts -->
     <script type="module" src="/src/main.jsx"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   </body>
