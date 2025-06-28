@@ -11,10 +11,18 @@ const razorpay = buildClient();
 exports.createOrder = async (req, res) => {
   try {
     const { userId, cartId, cartItems, totalAmount, addressInfo } = req.body;
-    if (!userId || !Array.isArray(cartItems) || !cartItems.length || totalAmount == null) {
-      return res.status(400).json({ success: false, message: "Missing required fields" });
+    if (
+      !userId ||
+      !Array.isArray(cartItems) ||
+      !cartItems.length ||
+      totalAmount == null
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing required fields" });
     }
 
+    console.log(cartItems);
     const amountInPaise = Math.round(totalAmount * 100);
     const options = {
       amount: amountInPaise,
@@ -29,12 +37,13 @@ exports.createOrder = async (req, res) => {
       userId,
       userName: user.username,
       cartId,
-      cartItems: cartItems.map(i => ({
+      cartItems: cartItems.map((i) => ({
         productId: i.productId,
         title: i.title,
         image: i.image || "",
         price: i.price,
         quantity: i.quantity,
+        size: i.size,
       })),
       addressInfo,
       orderStatus: "PENDING",
@@ -47,6 +56,7 @@ exports.createOrder = async (req, res) => {
       payerId: "",
     });
     await newOrder.save();
+    console.log(newOrder);
 
     res.status(201).json({
       success: true,
@@ -57,14 +67,21 @@ exports.createOrder = async (req, res) => {
     });
   } catch (e) {
     console.error("createOrder error:", e);
-    res.status(500).json({ success: false, message: "Error creating order", error: e.message });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Error creating order",
+        error: e.message,
+      });
   }
 };
 
 // Verify signature & capture payment
 exports.capturePayment = async (req, res) => {
   try {
-    const { razorpayPaymentId, razorpayOrderId, razorpaySignature, orderId } = req.body;
+    const { razorpayPaymentId, razorpayOrderId, razorpaySignature, orderId } =
+      req.body;
 
     const generatedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -72,11 +89,16 @@ exports.capturePayment = async (req, res) => {
       .digest("hex");
 
     if (generatedSignature !== razorpaySignature) {
-      return res.status(400).json({ success: false, message: "Invalid signature" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid signature" });
     }
 
     const order = await Order.findById(orderId);
-    if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+    if (!order)
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
 
     order.paymentStatus = "PAID";
     order.orderStatus = "CONFIRMED";
@@ -86,7 +108,8 @@ exports.capturePayment = async (req, res) => {
       const product = await Product.findById(item.productId);
       if (!product) throw new Error(`Product not found: ${item.productId}`);
       product.quantity -= item.quantity;
-      if (product.quantity < 0) throw new Error(`Insufficient stock for ${product.title}`);
+      if (product.quantity < 0)
+        throw new Error(`Insufficient stock for ${product.title}`);
       await product.save();
     }
 
@@ -100,7 +123,13 @@ exports.capturePayment = async (req, res) => {
     });
   } catch (e) {
     console.error("capturePayment error:", e);
-    res.status(500).json({ success: false, message: "Payment capture failed", error: e.message });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Payment capture failed",
+        error: e.message,
+      });
   }
 };
 
@@ -110,7 +139,9 @@ exports.getAllOrdersByUser = async (req, res) => {
     const { userId } = req.params;
     const orders = await Order.find({ userId });
     if (!orders.length) {
-      return res.status(404).json({ success: false, message: "No orders found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "No orders found" });
     }
     res.status(200).json({ success: true, data: orders });
   } catch (e) {
@@ -124,7 +155,9 @@ exports.getOrderDetails = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {
-      return res.status(404).json({ success: false, message: "Order not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
     }
     res.status(200).json({ success: true, data: order });
   } catch (e) {

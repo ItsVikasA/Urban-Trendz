@@ -111,9 +111,21 @@ const ShoppingHome = () => {
     dispatch(fetchProductDetails(productId));
   };
 
-  const handleAddToCart = (productId) => {
+  const handleAddToCart = (productId, q, size) => {
     console.log("Add to cart clicked for product ID:", productId, user);
-    dispatch(addToCart({ userId: user?.id, productId, quantity: 1 })).then(
+    console.log(q);
+    console.log("home-size", size);
+    if (size === null) {
+      toast(`enter the size of the product`, {
+        icon: "❌",
+        duration: 2000,
+        position: "top-center",
+        style: { backgroundColor: "black", color: "white" },
+      });
+      return;
+    }
+
+    dispatch(addToCart({ userId: user?.id, productId, quantity: 1 ,size : size})).then(
       (response) => {
         console.log("Product added to cart:", response);
         if (response.payload?.success) {

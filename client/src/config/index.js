@@ -96,12 +96,27 @@ export const addProductFormElements = [
     componentType: "select",
   },
   {
+    label: "Tshirt-Sizes",
+    name: "tshirtSizes",
+    type: "text",
+    placeholder: "Enter Tshirts sizes with ',' separated. like L,M,",
+    componentType: "textarea",
+  },
+  {
+    label: "Pant-Sizes",
+    name: "pantSizes",
+    type: "text",
+    placeholder: "Enter Pant sizes with ',' separated. like 26,28,30",
+    componentType: "textarea",
+  },
+  {
     label: "Price",
     name: "price",
     type: "number",
     placeholder: "Enter Product Price",
     componentType: "input",
   },
+
   {
     label: "Sell Price",
     name: "sellPrice",
@@ -176,17 +191,17 @@ export const filterOptions = {
     { id: "footwear", label: "Footwear" },
   ],
   brand: [
-      { id: "massey", label: "Massey" },
-      { id: "linonfeel", label: "Linon Feel" },
-      { id: "manwill", label: "Manwill" },
-      { id: "jockey", label: "Jockey" },
-      { id: "siyaram", label: "Siyaram" },
-      { id: "raymond", label: "Raymond" },
-      { id: "ramraj", label: "RamRaj" },
-      { id: "sambodi", label: "Sambodi" },
-      { id: "murarka", label: "Murarka" },
-      { id: "solino", label: "Solino" },
-      { id: "urbanInspire", label: "Urban Inspire" },
+    { id: "massey", label: "Massey" },
+    { id: "linonfeel", label: "Linon Feel" },
+    { id: "manwill", label: "Manwill" },
+    { id: "jockey", label: "Jockey" },
+    { id: "siyaram", label: "Siyaram" },
+    { id: "raymond", label: "Raymond" },
+    { id: "ramraj", label: "RamRaj" },
+    { id: "sambodi", label: "Sambodi" },
+    { id: "murarka", label: "Murarka" },
+    { id: "solino", label: "Solino" },
+    { id: "urbanInspire", label: "Urban Inspire" },
   ],
 };
 
@@ -199,37 +214,37 @@ export const sortOptions = [
 
 export const addressFormControls = [
   {
-    label : "Address",
-    name : "address",
-    componentType : "input",
-    type : "text",
-    placeholder : "Enter your address"
+    label: "Address",
+    name: "address",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your address",
   },
   {
-    label : "City",
-    name : "city",
-    componentType : "input",
-    type : "text",
-    placeholder : "Enter your City"
+    label: "City",
+    name: "city",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your City",
   },
   {
-    label : "PinCode",
-    name : "pincode",
-    componentType : "input",
-    type : "text",
-    placeholder : "Enter your pincode"
+    label: "PinCode",
+    name: "pincode",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your pincode",
   },
   {
-    label : "Phone",
-    name : "phone",
-    componentType : "input",
-    type : "text",
-    placeholder : "Enter your phone number"
+    label: "Phone",
+    name: "phone",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your phone number",
   },
   {
-    label : "Notes",
-    name : "notes",
-    componentType : "textarea",
-    placeholder : "Enter your additional notes"
+    label: "Notes",
+    name: "notes",
+    componentType: "textarea",
+    placeholder: "Enter your additional notes",
   },
-]
+];

@@ -45,6 +45,7 @@ const ShoppingCheckout = () => {
           image: item.image,
           price: item.sellPrice > 0 ? item.sellPrice : item.price,
           quantity: item.quantity,
+          size : item.size
         })),
         addressInfo: {
           addressId: currentSelectedAddress._id,
