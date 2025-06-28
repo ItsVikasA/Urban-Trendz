@@ -219,6 +219,13 @@ const ShoppingHome = () => {
         </Button>
       </div>
 
+      <div className="flex gap-2 text-lg text-gray-100">
+        <a href="">instagram</a>
+        <a href="">Whatsapp</a>
+        <a href="">FaceBook</a>
+        <a href="">Youtube</a>
+      </div>
+
       <section className="py-6  rounded-xl">
         <div className="flex flex-col px-4">
           <h2 className="flex items-center justify-center text-3xl font-bold gap-2 text-gray-200 mb-8">
