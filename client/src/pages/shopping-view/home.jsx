@@ -117,12 +117,14 @@ const ShoppingHome = () => {
     },
   ];
 
-  const socialIcons = [
-    { icon: Facebook, href: "#", color: "hover:text-blue-500" },
-    { icon: Instagram, href: "#", color: "hover:text-pink-500" },
-    { icon: Youtube, href: "#", color: "hover:text-red-500" },
-    { icon: MessageCircle, href: "#", color: "hover:text-green-500" },
-  ];
+const socialIcons = [
+  { icon: Instagram, href: "https://www.instagram.com/urban_trendz_mudhol", color: "hover:text-pink-500", label: "Instagram" },
+  { icon: MessageCircle, href: "https://wa.me/917090607020", color: "hover:text-green-500", label: "WhatsApp" },
+  { icon: Facebook, href: "https://www.facebook.com/aribenchimallu", color: "hover:text-blue-500", label: "Facebook" },
+  { icon: Youtube, href: "https://www.youtube.com/@UrbanTrendzMudhol", color: "hover:text-red-500", label: "YouTube" },
+  { icon: Star, href: "https://g.co/kgs/noC8dHZ", color: "hover:text-yellow-300", label: "Reviews" }
+];
+
 
   useEffect(() => {
     const interval = setInterval(() => {
