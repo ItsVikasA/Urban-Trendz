@@ -9,7 +9,7 @@ import {
 import { CopyPlus } from "lucide-react";
 import CommonForm from "../../components/common/form";
 import { addProductFormElements } from "../../config";
-import MultiImageUpload from "@/components/admin-view/MultiImageUpload";
+import MultiImageUpload from "@/components/admin-view/multiImageUpload";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewProduct,
