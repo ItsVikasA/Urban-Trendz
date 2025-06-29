@@ -218,7 +218,7 @@ const ShoppingHeader = () => {
             <ShoppingBag className="w-5 h-5 text-gray-900" />
           </div>
           <span className="font-bold text-lg md:text-xl bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent group-hover:from-orange-300 group-hover:to-amber-300 transition-all duration-200">
-            ECommerce
+            Urban Trendz
           </span>
         </Link>
 
