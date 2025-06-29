@@ -15,7 +15,7 @@ import { addProductReview, getProductReviews } from "@/store/shop/review-slice";
 
 const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }) => {
   const [size, setSize] = useState(null);
-  const [reviewMsg, setReviewMsg] = useState("");
+  const [reviewMsg, setReviewMsg] = useState("-");
   const [rating, setRating] = useState(0);
   const [slideIdx, setSlideIdx] = useState(0);
   const [imageError, setImageError] = useState({});
@@ -37,7 +37,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
       setSlideIdx(0);
       setImageError({});
       setSize(
-        productDetails.pantSizes === "-" && productDetails.shirtSizes === "-" 
+        productDetails.pantSizes === "-" && productDetails.tshirtSizes === "-" 
         ? "-" 
         : null
       );
@@ -232,12 +232,12 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
                 />
               </div>
             )}
-            {productDetails?.shirtSizes !== "-" && productDetails?.shirtSizes && (
+            {productDetails?.tshirtSizes !== "-" && productDetails?.tshirtSizes && (
               <div className="flex flex-col gap-1">
                 <span>
                   Available T-Shirt Sizes :{" "}
                   <span className="font-extrabold text-orange-100">
-                    {productDetails.shirtSizes}
+                    {productDetails.thirtSizes}
                   </span>
                 </span>
                 <Input
@@ -250,7 +250,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
               </div>
             )}
             {(productDetails?.pantSizes === "-" || !productDetails?.pantSizes) && 
-             (productDetails?.shirtSizes === "-" || !productDetails?.shirtSizes) && (
+             (productDetails?.tshirtSizes === "-" || !productDetails?.tshirtSizes) && (
               <div className="text-gray-400">Size: Not applicable</div>
             )}
           </div>
