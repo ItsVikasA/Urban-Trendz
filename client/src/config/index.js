@@ -96,10 +96,10 @@ export const addProductFormElements = [
     componentType: "select",
   },
   {
-    label: "Tshirt-Sizes",
-    name: "tshirtSizes",
+    label: "shirt-Sizes",
+    name: "shirtSizes",
     type: "text",
-    placeholder: "Enter Tshirts sizes with ',' separated. like L,M,",
+    placeholder: "Enter Shirts sizes with ',' separated. like L,M,",
     componentType: "textarea",
   },
   {

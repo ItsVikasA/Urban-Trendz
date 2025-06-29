@@ -37,7 +37,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
       setSlideIdx(0);
       setImageError({});
       setSize(
-        productDetails.pantSizes === "-" && productDetails.tshirtSizes === "-" 
+        productDetails.pantSizes === "-" && productDetails.shirtSizes === "-" 
         ? "-" 
         : null
       );
@@ -232,12 +232,12 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
                 />
               </div>
             )}
-            {productDetails?.tshirtSizes !== "-" && productDetails?.tshirtSizes && (
+            {productDetails?.shirtSizes !== "-" && productDetails?.shirtSizes && (
               <div className="flex flex-col gap-1">
                 <span>
                   Available T-Shirt Sizes :{" "}
                   <span className="font-extrabold text-orange-100">
-                    {productDetails.tshirtSizes}
+                    {productDetails.shirtSizes}
                   </span>
                 </span>
                 <Input
@@ -250,7 +250,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
               </div>
             )}
             {(productDetails?.pantSizes === "-" || !productDetails?.pantSizes) && 
-             (productDetails?.tshirtSizes === "-" || !productDetails?.tshirtSizes) && (
+             (productDetails?.shirtSizes === "-" || !productDetails?.shirtSizes) && (
               <div className="text-gray-400">Size: Not applicable</div>
             )}
           </div>

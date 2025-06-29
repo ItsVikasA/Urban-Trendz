@@ -14,7 +14,7 @@ const ShoppingProductTile = ({
 
   // default size if none provided
   const defaultSize =
-    product?.pantSizes === "-" && product?.tshirtSizes === "-"
+    product?.pantSizes === "-" && product?.shirtSizes === "-"
       ? "-"
       : null;
 
@@ -257,9 +257,9 @@ const ShoppingProductTile = ({
                 Pant: {product.pantSizes}
               </span>
             )}
-            {product.tshirtSizes !== "-" && product.tshirtSizes && (
+            {product.shirtSizes !== "-" && product.shirtSizes && (
               <span className="bg-gray-700 px-2 py-1 rounded">
-                T-Shirt: {product.tshirtSizes}
+                T-Shirt: {product.shirtSizes}
               </span>
             )}
           </div>

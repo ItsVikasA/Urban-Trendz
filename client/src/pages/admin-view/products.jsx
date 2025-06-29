@@ -33,7 +33,7 @@ const initialFormData = {
   description: "",
   category: "Men",
   brand: "",
-  tshirtSizes: "",
+  shirtSizes: "",
   pantSizes: "",
   quantity: 0,
   price: 0,
