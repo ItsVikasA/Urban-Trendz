@@ -117,14 +117,13 @@ const ShoppingHome = () => {
     },
   ];
 
-const socialIcons = [
-  { icon: Instagram, href: "https://www.instagram.com/urban_trendz_mudhol", color: "hover:text-pink-500", label: "Instagram" },
-  { icon: MessageCircle, href: "https://wa.me/917090607020", color: "hover:text-green-500", label: "WhatsApp" },
-  { icon: Facebook, href: "https://www.facebook.com/aribenchimallu", color: "hover:text-blue-500", label: "Facebook" },
-  { icon: Youtube, href: "https://www.youtube.com/@UrbanTrendzMudhol", color: "hover:text-red-500", label: "YouTube" },
-  { icon: Star, href: "https://g.co/kgs/noC8dHZ", color: "hover:text-yellow-300", label: "Reviews" }
-];
-
+  const socialIcons = [
+   { icon: Instagram, href: "https://www.instagram.com/urban_trendz_mudhol", color: "hover:text-pink-500", label: "Instagram" },
+   { icon: MessageCircle, href: "https://wa.me/917090607020", color: "hover:text-green-500", label: "WhatsApp" },
+   { icon: Facebook, href: "https://www.facebook.com/aribenchimallu", color: "hover:text-blue-500", label: "Facebook" },
+   { icon: Youtube, href: "https://www.youtube.com/@UrbanTrendzMudhol", color: "hover:text-red-500", label: "YouTube" },
+   { icon: Star, href: "https://g.co/kgs/noC8dHZ", color: "hover:text-yellow-300", label: "Reviews" }
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -185,6 +184,7 @@ const socialIcons = [
       setOpenDetailsDailog(true);
     }
   }, [productDetails]);
+
   useEffect(() => {
     return () => {
       dispatch(setProductDetails());
@@ -199,7 +199,7 @@ const socialIcons = [
 
   // Get popular products (first 6 products)
   const popularProducts = productList.slice(0, 6);
-  
+
   // Get latest products (sort by creation date - assuming products have createdAt or _id for sorting)
   // Since newer MongoDB ObjectIds contain timestamp, we can sort by _id in descending order
   const latestProducts = [...productList]
@@ -426,6 +426,41 @@ const socialIcons = [
         </div>
       </section>
 
+      {/* Latest Products */}
+      <section className="py-6 p-2 mt-2 md:mt-4 md:py-12 mx-4 md:mx-8 lg:mx-16 bg-gray-800 rounded-xl">
+        <h2 className="flex items-center gap-2 text-2xl md:text-3xl font-bold text-orange-100 mb-6">
+          <Sparkles /> Latest Products
+        </h2>
+
+        {/* Desktop grid */}
+        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {latestProducts.map((p) => (
+            <ShoppingProductTile
+              key={p._id}
+              product={p}
+              handleGetProductDetails={handleGetProductDetails}
+              handleAddToCart={handleAddToCart}
+            />
+          ))}
+        </div>
+
+        {/* Mobile: two per view horizontal scroll */}
+        <div className="md:hidden overflow-x-auto scrollbar-hide">
+          <div className="flex gap-4 pb-2" style={{ width: "max-content" }}>
+            {latestProducts.map((p) => (
+              <div key={p._id} className="flex-shrink-0 min-w-[50vw] px-2">
+                <ShoppingProductTile
+                  product={p}
+                  handleGetProductDetails={handleGetProductDetails}
+                  handleAddToCart={handleAddToCart}
+                  isMobile
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Popular Products */}
       <section className="py-6 md:py-12 mx-4 md:mx-8 lg:mx-16">
         <h2 className="flex items-center gap-2 text-2xl md:text-3xl font-bold text-gray-200 mb-6">
@@ -448,41 +483,6 @@ const socialIcons = [
         <div className="md:hidden overflow-x-auto scrollbar-hide">
           <div className="flex gap-4 pb-2" style={{ width: "max-content" }}>
             {popularProducts.map((p) => (
-              <div key={p._id} className="flex-shrink-0 min-w-[50vw] px-2">
-                <ShoppingProductTile
-                  product={p}
-                  handleGetProductDetails={handleGetProductDetails}
-                  handleAddToCart={handleAddToCart}
-                  isMobile
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Latest Products */}
-      <section className="py-6 p-2 md:py-12 mx-4 md:mx-8 lg:mx-16 bg-gray-800 rounded-xl">
-        <h2 className="flex items-center gap-2 text-2xl md:text-3xl font-bold text-orange-100 mb-6">
-          <Sparkles /> Latest Products
-        </h2>
-
-        {/* Desktop grid */}
-        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {latestProducts.map((p) => (
-            <ShoppingProductTile
-              key={p._id}
-              product={p}
-              handleGetProductDetails={handleGetProductDetails}
-              handleAddToCart={handleAddToCart}
-            />
-          ))}
-        </div>
-
-        {/* Mobile: two per view horizontal scroll */}
-        <div className="md:hidden overflow-x-auto scrollbar-hide">
-          <div className="flex gap-4 pb-2" style={{ width: "max-content" }}>
-            {latestProducts.map((p) => (
               <div key={p._id} className="flex-shrink-0 min-w-[50vw] px-2">
                 <ShoppingProductTile
                   product={p}
