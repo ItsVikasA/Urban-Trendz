@@ -31,7 +31,7 @@ const SearchProducts = () => {
 
   // Trending searches with better mobile-friendly names
   const trendingSearches = [
-    "Jockey", "T-Shirts", "Combos", "Pants", "Clothing", "Dresses"
+    "Jockey", "Shirts", "Combos", "Pants", "Clothing", "Dresses"
   ];
 
   // Load recent searches from memory (you could use localStorage if needed elsewhere)
