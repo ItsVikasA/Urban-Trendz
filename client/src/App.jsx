@@ -30,8 +30,9 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = JSON.parse(sessionStorage.getItem("token"));
-    dispatch(checkAuth(token));
+    // const token = JSON.parse(sessionStorage.getItem("token"));
+    // dispatch(checkAuth(token));
+    dispatch(checkAuth());
   }, [dispatch]);
 
   const allRoutes = useRoutes([
@@ -114,10 +115,10 @@ const App = () => {
           path: "listing",
           element: <ShoppingLists />,
         },
-        // {
-        //   path: "paypal-return",
-        //   element: <PaypalReturnPage />,
-        // },
+        {
+          path: "paypal-return",
+          element: <PaypalReturnPage />,
+        },
         {
           path: "razorpay-success",
           element: <PaymentSuccessPage />,
