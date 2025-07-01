@@ -2,18 +2,17 @@ import React from "react";
 import { Button } from "../ui/button";
 import { AlignJustify, LogOut } from "lucide-react";
 import { useDispatch } from "react-redux";
-// import { resetTokenAndCredentials } from "../../store/auth-slice/";
-// import { useNavigate } from "react-router";
-import { logoutUser } from "@/store/auth-slice";
+import { resetTokenAndCredentials } from "../../store/auth-slice/";
+import { useNavigate } from "react-router";
 const AdminHeader = ({ setOpen }) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogoutUser = () => {
-    dispatch(logoutUser());
-    // dispatch(resetTokenAndCredentials());
-    // sessionStorage.clear();
-    // navigate("/auth/login");
+    // dispatch(logoutUser());
+    dispatch(resetTokenAndCredentials());
+    sessionStorage.clear();
+    navigate("/auth/login");
   };
   return (
     <header className="flex justify-between items-center p-2 bg-gray-900 text-white">

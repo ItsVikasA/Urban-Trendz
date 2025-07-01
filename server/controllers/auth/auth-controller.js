@@ -68,36 +68,36 @@ const loginUser = async (req, res) => {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: process.env.JWT_EXPIRATION || "30d",
+        expiresIn: process.env.JWT_EXPIRATION || "2d",
       }
     );
 
-    // res.status(200).json({
-    //   success: true,
-    //   message: "Logged in Successfully",
-
-    //   user: {
-    //     id: checkUser._id,
-    //     username: checkUser.username,
-    //     email: checkUser.email,
-    //     role: checkUser.role,
-    //   },
-    // });
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-      })
-      .json({
-        success: true,
-        message: "Login successfully",
-        user: {
-          id: checkUser._id,
-          username: checkUser.username,
-          email: checkUser.email,
-          role: checkUser.role,
-        },
-      });
+    res.status(200).json({
+      success: true,
+      message: "Logged in Successfully",
+      token,
+      user: {
+        id: checkUser._id,
+        username: checkUser.username,
+        email: checkUser.email,
+        role: checkUser.role,
+      },
+    });
+    // res
+    //   .cookie("token", token, {
+    //     httpOnly: true,
+    //     secure: true,
+    //   })
+    //   .json({
+    //     success: true,
+    //     message: "Login successfully",
+    //     user: {
+    //       id: checkUser._id,
+    //       username: checkUser.username,
+    //       email: checkUser.email,
+    //       role: checkUser.role,
+    //     },
+    //   });
   } catch (e) {
     console.log(e);
     res.status(500).json({
@@ -123,31 +123,9 @@ const logoutUser = async (req, res) => {
   }
 };
 
-// auth middleware
-const authMiddleware = async (req, res, next) => {
-  const token = req.cookies.token;
-  if (!token) {
-    return res.status(401).json({
-      success: false,
-      message: "Unauthorized user",
-    });
-  }
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (e) {
-    console.log(e);
-    res.status(401).json({
-      success: false,
-      message: "Invalid token",
-    });
-  }
-};
-
+//auth middleware
 // const authMiddleware = async (req, res, next) => {
-//   const authHeader = req.headers["authorization"];
-//   const token = authHeader && authHeader.split(" ")[1];
+//   const token = req.cookies.token;
 //   if (!token) {
 //     return res.status(401).json({
 //       success: false,
@@ -166,6 +144,28 @@ const authMiddleware = async (req, res, next) => {
 //     });
 //   }
 // };
+
+const authMiddleware = async (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized user",
+    });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (e) {
+    console.log(e);
+    res.status(401).json({
+      success: false,
+      message: "Invalid token",
+    });
+  }
+};
 
 module.exports = {
   registerUser,

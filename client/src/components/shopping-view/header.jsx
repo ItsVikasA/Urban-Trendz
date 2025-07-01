@@ -21,7 +21,7 @@ import {
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { logoutUser } from "@/store/auth-slice";
+import { resetTokenAndCredentials } from "@/store/auth-slice";
 import UserCartWrapper from "./cart-wrapper";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -108,10 +108,9 @@ const HeaderRightContent = ({ user, isMobile = false }) => {
   const { cartItems } = useSelector((state) => state.shoppingCart);
 
   const handleLogout = () => {
-    dispatch(logoutUser());
-    // dispatch(resetTokenAndCredentials());
-    // sessionStorage.clear();
-    // navigate("/auth/login");
+    dispatch(resetTokenAndCredentials());
+    sessionStorage.clear();
+    navigate("/auth/login");
   };
 
   useEffect(() => {
