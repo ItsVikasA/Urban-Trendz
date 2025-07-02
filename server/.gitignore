@@ -1,3 +1,8 @@
 node_modules
 .env
+<<<<<<< HEAD
 /dist
+=======
+dist/
+ 
+>>>>>>> 068166e (deleted firebase keys)
