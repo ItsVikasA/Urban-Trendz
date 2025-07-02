@@ -21,7 +21,7 @@ import {
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { resetTokenAndCredentials } from "@/store/auth-slice";
+import { logoutUser } from "@/store/auth-slice";
 import UserCartWrapper from "./cart-wrapper";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -108,9 +108,10 @@ const HeaderRightContent = ({ user, isMobile = false }) => {
   const { cartItems } = useSelector((state) => state.shoppingCart);
 
   const handleLogout = () => {
-    dispatch(resetTokenAndCredentials());
-    sessionStorage.clear();
-    navigate("/auth/login");
+    dispatch(logoutUser());
+    // dispatch(resetTokenAndCredentials());
+    // sessionStorage.clear();
+    // navigate("/auth/login");
   };
 
   useEffect(() => {
@@ -241,7 +242,7 @@ const ShoppingHeader = () => {
                 <div className="p-1.5 bg-gradient-to-br from-orange-500 to-amber-500 rounded">
                   <ShoppingBag className="w-4 h-4 text-gray-900" />
                 </div>
-                <span className="text-orange-400 font-bold">ECommerce</span>
+                <span className="text-orange-400 font-bold">Urban Trendz</span>
               </div>
             </div>
 
