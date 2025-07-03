@@ -20,7 +20,10 @@ export const fetchAllAddress = createAsyncThunk(
   "addresses/fetchAllAddress",
   async ({ userId }) => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/shop/address/get/${userId}`
+      `${import.meta.env.VITE_API_URL}/api/shop/address/get/${userId}`,
+      {
+          withCredentials : true,
+        }
     );
     return response.data;
   }
@@ -31,7 +34,10 @@ export const editAddress = createAsyncThunk(
   async ({ userId, addressId, formData }) => {
     const response = await axios.put(
       `${import.meta.env.VITE_API_URL}/api/shop/address/edit/${userId}/${addressId}`,
-      formData
+      formData,
+      {
+          withCredentials : true,
+        }
     );
     return response.data;
   }
@@ -41,7 +47,10 @@ export const deleteAddress = createAsyncThunk(
   "addresses/deleteAddress",
   async ({ userId, addressId }) => {
     const response = await axios.delete(
-      `${import.meta.env.VITE_API_URL}/api/shop/address/delete/${userId}/${addressId}`
+      `${import.meta.env.VITE_API_URL}/api/shop/address/delete/${userId}/${addressId}`,
+      {
+          withCredentials : true,
+        }
     );
     return response.data;
   }

@@ -23,7 +23,10 @@ export const getProductReviews = createAsyncThunk(
   async (productId) => {
     // Make API request
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/shop/review/${productId}`
+      `${import.meta.env.VITE_API_URL}/api/shop/review/${productId}`,
+      {
+          withCredentials : true,
+        }
     );
 
     return response.data;

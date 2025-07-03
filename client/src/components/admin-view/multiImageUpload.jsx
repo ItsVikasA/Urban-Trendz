@@ -35,7 +35,10 @@ const MultiImageUpload = ({
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/admin/products/upload-images`,
-        data
+        data,
+        {
+          withCredentials : true,
+        }
       );
       if (res.data?.success) {
         const all = uploadedUrls.concat(res.data.urls);

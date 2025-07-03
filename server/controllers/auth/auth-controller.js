@@ -33,7 +33,7 @@ const googleLogin = async (req, res) => {
     );
 
     res
-      .cookie("token", token, { httpOnly: true, secure: true })
+      .cookie("token", token, { httpOnly: true, secure: true,sameSite : 'none' })
       .json({ success: true, message : "User Login Successfully !" , user: { id: user._id, username: user.username, email: user.email } });
   } catch (err) {
     console.error(err);
@@ -124,6 +124,7 @@ const loginUser = async (req, res) => {
       .cookie("token", token, {
         httpOnly: true,
         secure: true,
+        sameSite : 'none',
       })
       .json({
         success: true,

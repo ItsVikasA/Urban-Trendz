@@ -22,7 +22,10 @@ export const getFeatureImages = createAsyncThunk(
   "/common/getFeatureImages",
   async () => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/common/images/get`
+      `${import.meta.env.VITE_API_URL}/api/common/images/get`,
+      {
+          withCredentials : true,
+        }
     );
     return response.data;
   }

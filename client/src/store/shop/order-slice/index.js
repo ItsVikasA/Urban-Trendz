@@ -18,7 +18,10 @@ export const createNewOrder = createAsyncThunk(
   async (orderData) => {
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/api/shop/order/create`,
-      orderData
+      orderData,
+      {
+          withCredentials : true,
+        }
     );
     return response.data;
   }
@@ -29,7 +32,10 @@ export const capturePayment = createAsyncThunk(
   async ({ orderId, razorpayPaymentId, razorpaySignature, razorpayOrderId }) => {
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/api/shop/order/capture`,
-      { orderId, razorpayPaymentId, razorpaySignature, razorpayOrderId }
+      { orderId, razorpayPaymentId, razorpaySignature, razorpayOrderId },
+      {
+          withCredentials : true,
+        }
     );
     return response.data;
   }
@@ -39,7 +45,10 @@ export const getAllOrdersByUser = createAsyncThunk(
   "/order/getAllOrdersByUser",
   async (userId) => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/shop/order/list/${userId}`
+      `${import.meta.env.VITE_API_URL}/api/shop/order/list/${userId}`,
+      {
+          withCredentials : true,
+        }
     );
     return response.data;
   }
@@ -49,7 +58,10 @@ export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id) => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/shop/order/details/${id}`
+      `${import.meta.env.VITE_API_URL}/api/shop/order/details/${id}`,
+      {
+          withCredentials : true,
+        }
     );
     return response.data;
   }

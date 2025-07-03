@@ -26,7 +26,10 @@ export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
   async ({ userId }) => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/shop/cart/get/${userId}`
+      `${import.meta.env.VITE_API_URL}/api/shop/cart/get/${userId}`,
+      {
+          withCredentials : true,
+        }
     );
     return response.data;
   }
@@ -41,7 +44,10 @@ export const upadteCartItemQuantity = createAsyncThunk(
         userId,
         productId,
         quantity,
-      }
+      },
+      {
+          withCredentials : true,
+        }
     );
     return response.data;
   }
@@ -53,7 +59,10 @@ export const deleteCartItem = createAsyncThunk(
     const response = await axios.delete(
       `${
         import.meta.env.VITE_API_URL
-      }/api/shop/cart/delete/${userId}/${productId}`
+      }/api/shop/cart/delete/${userId}/${productId}`,
+      {
+          withCredentials : true,
+        }
     );
     return response.data;
   }

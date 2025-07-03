@@ -36,7 +36,10 @@ const ProductImageUpload = ({
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/common/images/add`,
-        data
+        data,
+        {
+          withCredentials : true,
+        }
       );
       if (res.data?.success) {
         setImageUploadedUrl(res.data.data.image || res.data.data);
