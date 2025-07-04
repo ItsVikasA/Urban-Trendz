@@ -68,7 +68,7 @@ const ShopAddress = ({ setCurrentSelectedAddress }) => {
         editAddress({
           userId: user.id,
           addressId: currentEditedId,
-          ...formData,
+          formData,
         })
       );
 
