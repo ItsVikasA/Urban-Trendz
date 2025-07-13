@@ -11,7 +11,7 @@ const ShoppingOrderDetails = ({ orderDetails }) => {
   const getStatusConfig = (status) => {
     const configs = {
       confirmed: { 
-        color: "bg-blue-500/20 text-blue-400 border-blue-400/30",
+        color: "bg-blue-500/20 text-blue-400 border-blue-400/30", 
         icon: "✓"
       },
       rejected: { 

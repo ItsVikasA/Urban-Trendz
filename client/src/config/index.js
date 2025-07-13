@@ -70,7 +70,7 @@ export const addProductFormElements = [
       { id: "men", label: "Men" },
       { id: "accessories", label: "Accessories" },
       { id: "electronics", label: "Electronics" },
-      { id: "footwear", label: "Footwear" },
+      // { id: "footwear", label: "Footwear" },
     ],
     componentType: "select",
   },
@@ -174,11 +174,11 @@ export const shoppingViewHeaderMenuItems = [
     label: "Electronics",
     path: "/shop/listing",
   },
-  {
-    id: "footwear",
-    label: "Footwear",
-    path: "/shop/listing",
-  },
+  // {
+  //   id: "footwear",
+  //   label: "Footwear",
+  //   path: "/shop/listing",
+  // },
 
 ];
 
@@ -189,7 +189,7 @@ export const filterOptions = {
     { id: "men", label: "Men" },
     { id: "accessories", label: "Accessories" },
     { id: "electronics", label: "Electronics" },
-    { id: "footwear", label: "Footwear" },
+    // { id: "footwear", label: "Footwear" },
   ],
   brand: [
     { id: "massey", label: "Massey" },

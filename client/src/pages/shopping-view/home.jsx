@@ -83,7 +83,7 @@ const ShoppingHome = () => {
     { id: "men", label: "Men", icon: Mars },
     { id: "accessories", label: "Accessories", icon: Glasses },
     { id: "electronics", label: "Electronics", icon: Plug },
-    { id: "footwear", label: "Footwear", icon: Footprints },
+    // { id: "footwear", label: "Footwear", icon: Footprints },
   ];
 
   const popularBrands = [
