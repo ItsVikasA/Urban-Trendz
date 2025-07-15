@@ -57,7 +57,6 @@ const AdminProducts = () => {
         setFormData({
           images: prod.images || [],
           title: prod.title || "",
-          description: prod.description || "",
           category: prod.category || "Men",
           brand: prod.brand || "",
           tshirtSizes: prod.tshirtSizes || "",
@@ -65,6 +64,7 @@ const AdminProducts = () => {
           quantity: prod.quantity || 0,
           price: prod.price || 0,
           sellPrice: prod.sellPrice || 0,
+          description: prod.description || "",
         })
         setUrls(prod.images || [])
         setOpen(true)

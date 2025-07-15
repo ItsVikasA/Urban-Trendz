@@ -70,7 +70,6 @@ export const addProductFormElements = [
       { id: "men", label: "Men" },
       { id: "accessories", label: "Accessories" },
       { id: "electronics", label: "Electronics" },
-      // { id: "footwear", label: "Footwear" },
     ],
     componentType: "select",
   },
@@ -99,14 +98,14 @@ export const addProductFormElements = [
     label: "Shirt-Sizes",
     name: "tshirtSizes",
     type: "text",
-    placeholder: "Enter Shirts sizes with ',' separated. like L,M,",
+    placeholder: "Enter Shirt sizes with ',' separated. like L=21,M=10,",
     componentType: "textarea",
   },
   {
     label: "Pant-Sizes",
     name: "pantSizes",
     type: "text",
-    placeholder: "Enter Pant sizes with ',' separated. like 26,28,30",
+    placeholder: "Enter Pant sizes with ',' separated. like 26=4,28=10,30=34",
     componentType: "textarea",
   },
   {
@@ -134,9 +133,9 @@ export const addProductFormElements = [
 ];
 
 export const shoppingViewHeaderMenuItems = [
-    {
+  {
     id: "search",
-    label:"Ϙ Search",
+    label: "Ϙ Search",
     path: "/shop/search",
   },
   {
@@ -174,12 +173,6 @@ export const shoppingViewHeaderMenuItems = [
     label: "Electronics",
     path: "/shop/listing",
   },
-  // {
-  //   id: "footwear",
-  //   label: "Footwear",
-  //   path: "/shop/listing",
-  // },
-
 ];
 
 export const filterOptions = {
@@ -189,7 +182,6 @@ export const filterOptions = {
     { id: "men", label: "Men" },
     { id: "accessories", label: "Accessories" },
     { id: "electronics", label: "Electronics" },
-    // { id: "footwear", label: "Footwear" },
   ],
   brand: [
     { id: "massey", label: "Massey" },

@@ -23,8 +23,8 @@ const handleImageUpload = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
-    const { images, title, description, category, brand, shirtSizes, pantSizes, price, sellPrice, quantity } = req.body;
-    const newProd = await Product.create({ images, title, description, category, brand, shirtSizes, pantSizes, price: price||0, sellPrice: sellPrice||0, quantity });
+    const { images, title, description, category, brand, tshirtSizes, pantSizes, price, sellPrice, quantity } = req.body;
+    const newProd = await Product.create({ images, title, description, category, brand, tshirtSizes, pantSizes, price: price||0, sellPrice: sellPrice||0, quantity });
     res.status(201).json({ success: true, data: newProd });
   } catch (e) {
     console.error(e);
