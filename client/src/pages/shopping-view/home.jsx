@@ -60,7 +60,7 @@ const ShoppingHome = () => {
   const { featureImageList } = useSelector((state) => state.commonFeatureImage);
   const slides = featureImageList;
   const [openDetailsDailog, setOpenDetailsDailog] = useState(false);
-  const { user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated } = useSelector((state) => state.auth); // Add isAuthenticated
   const navigate = useNavigate();
 
   const brandsWithIcon = [
@@ -83,7 +83,6 @@ const ShoppingHome = () => {
     { id: "men", label: "Men", icon: Mars },
     { id: "accessories", label: "Accessories", icon: Glasses },
     { id: "electronics", label: "Electronics", icon: Plug },
-    // { id: "footwear", label: "Footwear", icon: Footprints },
   ];
 
   const popularBrands = [
@@ -118,11 +117,10 @@ const ShoppingHome = () => {
   ];
 
   const socialIcons = [
-   { icon: Instagram, href: "https://www.instagram.com/urban_trendz_mudhol", color: "hover:text-pink-500", label: "Instagram" },
-   { icon: MessageCircle, href: "https://wa.me/917090607020", color: "hover:text-green-500", label: "WhatsApp" },
-   { icon: Facebook, href: "https://www.facebook.com/aribenchimallu", color: "hover:text-blue-500", label: "Facebook" },
-   { icon: Youtube, href: "https://www.youtube.com/@UrbanTrendzMudhol", color: "hover:text-red-500", label: "YouTube" },
-   { icon: Star, href: "https://g.co/kgs/noC8dHZ", color: "hover:text-yellow-300", label: "Reviews" }
+    { icon: Facebook, href: "#", color: "hover:text-blue-500" },
+    { icon: Instagram, href: "#", color: "hover:text-pink-500" },
+    { icon: Youtube, href: "#", color: "hover:text-red-500" },
+    { icon: MessageCircle, href: "#", color: "hover:text-green-500" },
   ];
 
   useEffect(() => {
@@ -152,7 +150,7 @@ const ShoppingHome = () => {
 
   const handleAddToCart = (productId, q, size) => {
     if (size === null) {
-      toast(`enter the size of the product`, {
+      toast(`Enter the size of the product`, {
         icon: "❌",
         duration: 2000,
         position: "top-center",
@@ -161,8 +159,27 @@ const ShoppingHome = () => {
       return;
     }
 
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      toast("Please login to add items to cart", {
+        icon: "🔒",
+        duration: 2000,
+        position: "top-center",
+        style: { backgroundColor: "black", color: "white" },
+      });
+      // Store the product details for after login (optional)
+      sessionStorage.setItem('pendingCartItem', JSON.stringify({
+        productId,
+        quantity: q || 1,
+        size
+      }));
+      navigate('/auth/login');
+      return;
+    }
+
+    // If user is authenticated, proceed with existing logic
     dispatch(
-      addToCart({ userId: user?.id, productId, quantity: 1, size: size })
+      addToCart({ userId: user?.id, productId, quantity: q || 1, size: size })
     ).then((response) => {
       if (response.payload?.success) {
         dispatch(fetchCartItems({ userId: user?.id }));
