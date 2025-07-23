@@ -30,15 +30,15 @@ const ShoppingFooter = () => {
       color: "hover:text-red-500",
       label: "YouTube" 
     },
-    // { 
-    //   icon: Twitter, 
-    //   href: "#", 
-    //   color: "hover:text-blue-400",
-    //   label: "Twitter" 
-    // },
+    { 
+      icon: Twitter, 
+      href: "https://g.co/kgs/noC8dHZ", 
+      color: "hover:text-blue-400",
+      label: "Google Review" 
+    },
     { 
       icon: MessageCircle, 
-      href: "+917090607020https://api.whatsapp.com/send/?phone=9538245678&text&type=phone_number&app_absent=0", 
+      href: "https://api.whatsapp.com/send/?phone=9538245678&text&type=phone_number&app_absent=0", 
       color: "hover:text-green-500",
       label: "WhatsApp" 
     },
@@ -58,7 +58,7 @@ const ShoppingFooter = () => {
                 <Phone className="w-5 h-5 text-orange-400 mt-1 flex-shrink-0" />
                 <div>
                   <span className="text-gray-400 block">Phone:</span>
-                  <span className="text-gray-300">8971749741</span>
+                  <span className="text-gray-300">953824578</span>
                 </div>
               </div>
               
@@ -66,7 +66,7 @@ const ShoppingFooter = () => {
                 <Mail className="w-5 h-5 text-orange-400 mt-1 flex-shrink-0" />
                 <div>
                   <span className="text-gray-400 block">Email:</span>
-                  <span className="text-gray-300">support@ka53mensclub.com</span>
+                  <span className="text-gray-300">urbantrendzmdl.com</span>
                 </div>
               </div>
               
