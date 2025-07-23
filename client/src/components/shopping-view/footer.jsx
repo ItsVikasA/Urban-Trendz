@@ -14,31 +14,31 @@ const ShoppingFooter = () => {
   const socialLinks = [
     { 
       icon: Facebook, 
-      href: "#", 
+      href: "https://www.facebook.com/aribenchimallu", 
       color: "hover:text-blue-500",
       label: "Facebook" 
     },
     { 
       icon: Instagram, 
-      href: "#", 
+      href: "https://www.instagram.com/urban_trendz_mudhol/", 
       color: "hover:text-pink-500",
       label: "Instagram" 
     },
     { 
       icon: Youtube, 
-      href: "#", 
+      href: "https://youtube.com/@urbantrendzmudhol", 
       color: "hover:text-red-500",
       label: "YouTube" 
     },
-    { 
-      icon: Twitter, 
-      href: "#", 
-      color: "hover:text-blue-400",
-      label: "Twitter" 
-    },
+    // { 
+    //   icon: Twitter, 
+    //   href: "#", 
+    //   color: "hover:text-blue-400",
+    //   label: "Twitter" 
+    // },
     { 
       icon: MessageCircle, 
-      href: "#", 
+      href: "+917090607020https://api.whatsapp.com/send/?phone=9538245678&text&type=phone_number&app_absent=0", 
       color: "hover:text-green-500",
       label: "WhatsApp" 
     },
@@ -75,7 +75,7 @@ const ShoppingFooter = () => {
                 <div>
                   <span className="text-gray-400 block">Address:</span>
                   <span className="text-gray-300">
-                    5TH CROSS, sri chaitanya school backgate krpuram, Krishna Nagar Main Road, kr puram, Bengaluru, Karnataka 560036
+                     Ranna Circle, Shop No 7, Lakkam Height, Yadavad, Near Syndicate Bank, Mudhol-587313
                   </span>
                 </div>
               </div>
