@@ -57,7 +57,7 @@ const ShoppingFooter = () => {
                 <Phone className="w-5 h-5 text-orange-400 mt-1 flex-shrink-0" />
                 <div>
                   <span className="text-gray-400 block">Phone:</span>
-                  <span className="text-gray-300">8971749741</span>
+                  <span className="text-gray-300">9538245678</span>
                 </div>
               </div>
               
@@ -65,7 +65,7 @@ const ShoppingFooter = () => {
                 <Mail className="w-5 h-5 text-orange-400 mt-1 flex-shrink-0" />
                 <div>
                   <span className="text-gray-400 block">Email:</span>
-                  <span className="text-gray-300">support@ka53mensclub.com</span>
+                  <span className="text-gray-300">urbantrendzmdl.com</span>
                 </div>
               </div>
               
@@ -74,7 +74,7 @@ const ShoppingFooter = () => {
                 <div>
                   <span className="text-gray-400 block">Address:</span>
                   <span className="text-gray-300">
-                    5TH CROSS, sri chaitanya school backgate krpuram, Krishna Nagar Main Road, kr puram, Bengaluru, Karnataka 560036
+                     Lakkam Complex Yadwad Circle,Near Canara Bank Mudhol-587313, Bagalkot, karnataka.
                   </span>
                 </div>
               </div>
