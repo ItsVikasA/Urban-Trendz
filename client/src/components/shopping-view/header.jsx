@@ -421,7 +421,7 @@ const ShoppingHeader = () => {
   const [openMenuSheet, setOpenMenuSheet] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const phoneNumber = "8971749741";
+  const phoneNumber = "+919538245678";
 
   useEffect(() => {
     if (user?.id) {
