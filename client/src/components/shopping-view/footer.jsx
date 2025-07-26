@@ -11,12 +11,12 @@ import {
 } from 'lucide-react';
 
 const ShoppingFooter = () => {
-  const socialLinks = [
+    const socialLinks = [
     { 
       icon: Facebook, 
       href: "https://www.facebook.com/aribenchimallu", 
       color: "hover:text-blue-500",
-      label: "Facebook" 
+      label: "Facebook"                                      
     },
     { 
       icon: Instagram, 
@@ -43,7 +43,6 @@ const ShoppingFooter = () => {
       label: "WhatsApp" 
     },
   ];
-
   return (
     <footer className="bg-gray-800 text-gray-300 py-12 px-4">
       <div className="max-w-7xl mx-auto">
@@ -58,7 +57,7 @@ const ShoppingFooter = () => {
                 <Phone className="w-5 h-5 text-orange-400 mt-1 flex-shrink-0" />
                 <div>
                   <span className="text-gray-400 block">Phone:</span>
-                  <span className="text-gray-300">9538245678</span>
+                  <span className="text-gray-300">8971749741</span>
                 </div>
               </div>
               
@@ -66,7 +65,7 @@ const ShoppingFooter = () => {
                 <Mail className="w-5 h-5 text-orange-400 mt-1 flex-shrink-0" />
                 <div>
                   <span className="text-gray-400 block">Email:</span>
-                  <span className="text-gray-300">urbantrendzmdl.com</span>
+                  <span className="text-gray-300">support@ka53mensclub.com</span>
                 </div>
               </div>
               
@@ -75,7 +74,7 @@ const ShoppingFooter = () => {
                 <div>
                   <span className="text-gray-400 block">Address:</span>
                   <span className="text-gray-300">
-                     Lakkam Complex Yadwad Circle,Near Canara Bank Mudhol-587313, Bagalkot, karnataka.
+                    5TH CROSS, sri chaitanya school backgate krpuram, Krishna Nagar Main Road, kr puram, Bengaluru, Karnataka 560036
                   </span>
                 </div>
               </div>
@@ -118,6 +117,12 @@ const ShoppingFooter = () => {
             <h3 className="text-white text-xl font-semibold mb-6">More Info</h3>
             
             <div className="space-y-3">
+              <a href="/shop/about/about-us" className="block text-gray-300 hover:text-orange-400 transition-colors duration-200 hover:translate-x-1 transform">
+                → About Us
+              </a>
+              <a href="/shop/about/contact-us" className="block text-gray-300 hover:text-orange-400 transition-colors duration-200 hover:translate-x-1 transform">
+                → Contact Us
+              </a>
               <a 
                 href="/shop/about/terms-of-service" 
                 className="block text-gray-300 hover:text-orange-400 transition-colors duration-200 hover:translate-x-1 transform"
@@ -183,6 +188,12 @@ const ShoppingFooter = () => {
               © 2025 Urban Trendz. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
+              <a href="/shop/about/about-us" className="text-gray-400 hover:text-orange-400 transition-colors">
+                About Us
+              </a>
+              <a href="/shop/about/contact-us" className="text-gray-400 hover:text-orange-400 transition-colors">
+                Contact Us
+              </a>
               <a href="/shop/about/terms-of-service" className="text-gray-400 hover:text-orange-400 transition-colors">
                 Terms
               </a>
