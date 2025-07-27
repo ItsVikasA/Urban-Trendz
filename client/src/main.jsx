@@ -10,8 +10,8 @@ import Maintenance from "./Maintanance";
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Provider store={store}>
-      <App />
-      {/* <Maintenance /> */}
+      {/* <App /> */}
+      <Maintenance />
       <Toaster/>
     </Provider>
   </BrowserRouter>
