@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { ImageIcon } from "lucide-react";
 
 const ShoppingProductTile = ({
   product,
   handleGetProductDetails,
-  // handleAddToCart,
   isMobile = false,
 }) => {
   const [imageError, setImageError] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+  const clickTimeoutRef = useRef(null);
 
   // pick first valid image URL
   const getProductImage = () => {
@@ -26,9 +27,54 @@ const ShoppingProductTile = ({
   const handleImageError = () => setImageError(true);
   const handleImageLoad = () => setImageError(false);
 
+  // FIXED: Prevent multiple calls with debounce and state check
+  const handleProductClick = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      console.log("Product tile clicked, current isClicked state:", isClicked);
+
+      // Prevent multiple clicks
+      if (isClicked) {
+        console.log("Click ignored - already processing");
+        return;
+      }
+
+      // Clear any existing timeout
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+      }
+
+      console.log("Processing click for product:", product._id);
+      setIsClicked(true);
+
+      // Call the handler
+      handleGetProductDetails(product._id);
+
+      // Reset the clicked state after a delay to prevent rapid clicking
+      clickTimeoutRef.current = setTimeout(() => {
+        console.log("Resetting isClicked state");
+        setIsClicked(false);
+      }, 2000); // 2 second cooldown
+    },
+    [product._id, handleGetProductDetails, isClicked]
+  );
+
+  // Cleanup timeout on unmount
+  React.useEffect(() => {
+    return () => {
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+      }
+    };
+  }, []);
+
   // placeholder when no image
   const ImagePlaceholder = ({ className }) => (
-    <div className={`bg-gray-800 flex items-center justify-center ${className}`}>
+    <div
+      className={`bg-gray-800 flex items-center justify-center ${className}`}
+    >
       <div className="text-center text-gray-500">
         <ImageIcon size={isMobile ? 24 : 48} className="mx-auto mb-1" />
         <p className="text-xs">No image</p>
@@ -39,9 +85,7 @@ const ShoppingProductTile = ({
   // discount percentage
   const discountPercentage =
     product.sellPrice > 0 && product.price > product.sellPrice
-      ? Math.round(
-          ((product.price - product.sellPrice) / product.price) * 100
-        )
+      ? Math.round(((product.price - product.sellPrice) / product.price) * 100)
       : 0;
 
   // Check if product has sizes
@@ -68,8 +112,10 @@ const ShoppingProductTile = ({
   if (isMobile) {
     return (
       <div
-        className="w-full cursor-pointer hover:opacity-90 transition-opacity duration-200"
-        onClick={() => handleGetProductDetails(product._id)}
+        className={`w-full cursor-pointer transition-all duration-200 ${
+          isClicked ? "opacity-60 pointer-events-none" : "hover:opacity-90"
+        }`}
+        onClick={handleProductClick}
       >
         {/* IMAGE */}
         <div className="relative w-40 h-50 overflow-hidden bg-gray-800">
@@ -89,6 +135,13 @@ const ShoppingProductTile = ({
           {discountPercentage > 0 && (
             <div className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1">
               -{discountPercentage}%
+            </div>
+          )}
+
+          {/* Loading indicator when clicked */}
+          {isClicked && (
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
         </div>
@@ -121,14 +174,16 @@ const ShoppingProductTile = ({
           {/* Sizes */}
           {hasSizes() && (
             <div className="flex flex-wrap gap-1">
-              {getAvailableSizes().slice(0, 4).map((size, index) => (
-                <span
-                  key={index}
-                  className="text-xs bg-gray-700 text-gray-300 px-2 py-1"
-                >
-                  {size}
-                </span>
-              ))}
+              {getAvailableSizes()
+                .slice(0, 4)
+                .map((size, index) => (
+                  <span
+                    key={index}
+                    className="text-xs bg-gray-700 text-gray-300 px-2 py-1"
+                  >
+                    {size}
+                  </span>
+                ))}
               {getAvailableSizes().length > 4 && (
                 <span className="text-xs text-gray-400">
                   +{getAvailableSizes().length - 4}
@@ -144,8 +199,10 @@ const ShoppingProductTile = ({
   // DESKTOP VARIANT
   return (
     <div
-      className="w-full max-w-sm mx-auto cursor-pointer hover:opacity-90 transition-opacity duration-200 group"
-      onClick={() => handleGetProductDetails(product._id)}
+      className={`w-full max-w-sm mx-auto cursor-pointer transition-all duration-200 group ${
+        isClicked ? "opacity-60 pointer-events-none" : "hover:opacity-90"
+      }`}
+      onClick={handleProductClick}
     >
       {/* IMAGE */}
       <div className="relative h-[280px] overflow-hidden bg-gray-800">
@@ -165,6 +222,13 @@ const ShoppingProductTile = ({
         {discountPercentage > 0 && (
           <div className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1">
             -{discountPercentage}%
+          </div>
+        )}
+
+        {/* Loading indicator when clicked */}
+        {isClicked && (
+          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
           </div>
         )}
       </div>
@@ -197,14 +261,16 @@ const ShoppingProductTile = ({
         {/* Sizes */}
         {hasSizes() && (
           <div className="flex flex-wrap gap-1">
-            {getAvailableSizes().slice(0, 5).map((size, index) => (
-              <span
-                key={index}
-                className="text-xs bg-gray-700 text-gray-300 px-2 py-1 border border-gray-600"
-              >
-                {size}
-              </span>
-            ))}
+            {getAvailableSizes()
+              .slice(0, 5)
+              .map((size, index) => (
+                <span
+                  key={index}
+                  className="text-xs bg-gray-700 text-gray-300 px-2 py-1 border border-gray-600"
+                >
+                  {size}
+                </span>
+              ))}
             {getAvailableSizes().length > 5 && (
               <span className="text-xs text-gray-400">
                 +{getAvailableSizes().length - 5} more

@@ -183,59 +183,136 @@ const ShoppingLists = () => {
     dispatch(fetchProductDetails(productId));
   };
 
+  // FIXED: Updated handleAddToCart to properly handle quantities
   const handleAddToCart = (getCurrentProductId, getTotalStock, selectedSize, totalCost = null, meters = null) => {
-    console.log("cartItems", cartItems);
-    console.log("totalCost and meters", totalCost,meters);
+    console.log("cartItemsfromlisting", cartItems);
+    console.log("Parameters:", { getCurrentProductId, getTotalStock, selectedSize, totalCost, meters });
+    
     let getCartItems = cartItems.items || [];
 
+    // Check if item already exists in cart
     if (getCartItems.length) {
       const indexOfCurrentItem = getCartItems.findIndex(
-        (item) => item.productId === getCurrentProductId
+        (item) => item.productId === getCurrentProductId && item.size === selectedSize
       );
+      
       if (indexOfCurrentItem > -1) {
-        const getQuantity = getCartItems[indexOfCurrentItem].quantity;
-        if (getQuantity + 1 > getTotalStock) {
-          toast(`Only ${getQuantity} quantity can be added for this item`, {
-            variant: "destructive",
+        const existingCartItem = getCartItems[indexOfCurrentItem];
+        const currentQuantityInCart = existingCartItem.quantity;
+        
+        // For shirting category
+        if (totalCost !== null && meters !== null) {
+          // For shirting, we don't check stock limits the same way
+          dispatch(
+            addToCart({
+              userId: user?.id,
+              productId: getCurrentProductId,
+              quantity: 1, // Always 1 for shirting since quantity is in meters
+              size: selectedSize,
+              totalCost: totalCost,
+              meters: meters
+            })
+          ).then((data) => {
+            if (data?.payload?.success) {
+              dispatch(fetchCartItems(user?.id));
+              toast("Product added to cart");
+            }
           });
-
-          return;
+        } else {
+          // For other categories, check stock limits
+          if (currentQuantityInCart + 1 > getTotalStock) {
+            toast(`Only ${getTotalStock} quantity available for this item`, {
+              variant: "destructive",
+            });
+            return;
+          }
+          
+          // Add 1 quantity to cart
+          dispatch(
+            addToCart({
+              userId: user?.id,
+              productId: getCurrentProductId,
+              quantity: 1, // FIXED: Always add 1 item
+              size: selectedSize,
+            })
+          ).then((data) => {
+            if (data?.payload?.success) {
+              dispatch(fetchCartItems(user?.id));
+              toast("Product added to cart");
+            }
+          });
+        }
+      } else {
+        // Item doesn't exist in cart, add new item
+        if (totalCost !== null && meters !== null) {
+          // For shirting category
+          dispatch(
+            addToCart({
+              userId: user?.id,
+              productId: getCurrentProductId,
+              quantity: 1,
+              size: selectedSize,
+              totalCost: totalCost,
+              meters: meters
+            })
+          ).then((data) => {
+            if (data?.payload?.success) {
+              dispatch(fetchCartItems(user?.id));
+              toast("Product added to cart");
+            }
+          });
+        } else {
+          // For other categories
+          dispatch(
+            addToCart({
+              userId: user?.id,
+              productId: getCurrentProductId,
+              quantity: 1, // FIXED: Always add 1 item
+              size: selectedSize,
+            })
+          ).then((data) => {
+            if (data?.payload?.success) {
+              dispatch(fetchCartItems(user?.id));
+              toast("Product added to cart");
+            }
+          });
         }
       }
-    }
-
-    // For shirting category with meters and total cost
-    if (totalCost !== null && meters !== null) {
-      dispatch(
-        addToCart({
-          userId: user?.id,
-          productId: getCurrentProductId,
-          quantity: 1, // Always 1 for shirting since quantity is in meters
-          size: selectedSize || "-",
-          totalCost: totalCost,
-          meters: meters
-        })
-      ).then((data) => {
-        if (data?.payload?.success) {
-          dispatch(fetchCartItems(user?.id));
-          toast("Product is added to cart");
-        }
-      });
     } else {
-      // Original logic for other categories
-      dispatch(
-        addToCart({
-          userId: user?.id,
-          productId: getCurrentProductId,
-          quantity: 1,
-          size: selectedSize || "-",
-        })
-      ).then((data) => {
-        if (data?.payload?.success) {
-          dispatch(fetchCartItems(user?.id));
-          toast("Product is added to cart");
-        }
-      });
+      // Cart is empty, add first item
+      if (totalCost !== null && meters !== null) {
+        // For shirting category
+        dispatch(
+          addToCart({
+            userId: user?.id,
+            productId: getCurrentProductId,
+            quantity: 1,
+            size: selectedSize,
+            totalCost: totalCost,
+            meters: meters
+          })
+        ).then((data) => {
+          if (data?.payload?.success) {
+            dispatch(fetchCartItems(user?.id));
+            toast("Product added to cart");
+          }
+        });
+      } else {
+        // For other categories
+        dispatch(
+          addToCart({
+            userId: user?.id,
+            productId: getCurrentProductId,
+            quantity: 1, // FIXED: Always add 1 item
+            size: selectedSize,
+          })
+        ).then((data) => {
+          if (data?.payload?.success) {
+            dispatch(fetchCartItems(user?.id));
+            toast("Product added to cart");
+          }
+        });
+      }
     }
   };
 

@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { ShoppingCart, MessageSquareMore, ChevronLeft, ChevronRight, ImageIcon, Package, Ruler } from "lucide-react";
+import {
+  ShoppingCart,
+  MessageSquareMore,
+  ChevronLeft,
+  ChevronRight,
+  ImageIcon,
+  Package,
+  Ruler,
+} from "lucide-react";
 import { Separator } from "../ui/separator";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Input } from "../ui/input";
@@ -13,67 +21,87 @@ import StarRatingComponent from "../common/star-rating";
 import { toast } from "sonner";
 import { addProductReview, getProductReviews } from "@/store/shop/review-slice";
 
-const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }) => {
+const ProductDetailsDialog = ({
+  open,
+  setOpen,
+  productDetails,
+  handleAddToCart,
+}) => {
   const [size, setSize] = useState(null);
   const [reviewMsg, setReviewMsg] = useState("-");
   const [rating, setRating] = useState(0);
   const [slideIdx, setSlideIdx] = useState(0);
   const [imageError, setImageError] = useState({});
   const [meters, setMeters] = useState(1); // New state for meters
-  
+
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.shoppingCart);
   const { user } = useSelector((state) => state.auth);
   const { productReviews } = useSelector((state) => state.shoppingReview);
-  
+
   // Check if current product is shirting category
-  const isShirtingCategory = productDetails?.category === 'men-shirting';
-  
+  const isShirtingCategory = productDetails?.category === "men-shirting";
+
   // Calculate total cost based on meters for shirting
   const calculateTotalCost = () => {
     if (!isShirtingCategory) return null;
-    
-    const basePrice = productDetails?.sellPrice > 0 ? productDetails.sellPrice : productDetails?.price || 0;
+
+    const basePrice =
+      productDetails?.sellPrice > 0
+        ? productDetails.sellPrice
+        : productDetails?.price || 0;
     return basePrice * meters;
   };
-  
+
   const totalCost = Math.floor(calculateTotalCost() || 0);
-  
+
   // Safe default array with proper validation
-  const images = productDetails?.images && Array.isArray(productDetails.images) 
-    ? productDetails.images.filter(img => img && typeof img === 'string' && img.trim() !== '')
-    : [];
-  
+  const images =
+    productDetails?.images && Array.isArray(productDetails.images)
+      ? productDetails.images.filter(
+          (img) => img && typeof img === "string" && img.trim() !== ""
+        )
+      : [];
+
   const hasValidImages = images.length > 0;
 
   // Parse sizes from the format "L=21,M=8,S=12"
   const parseSizes = (sizesString) => {
     if (!sizesString || sizesString === "-") return [];
-    
-    return sizesString.split(',').map(item => {
-      const [size, quantity] = item.trim().split('=');
-      return {
-        size: size?.trim(),
-        quantity: parseInt(quantity) || 0
-      };
-    }).filter(item => item.size && item.quantity > 0);
+
+    return sizesString
+      .split(",")
+      .map((item) => {
+        const [size, quantity] = item.trim().split("=");
+        return {
+          size: size?.trim(),
+          quantity: parseInt(quantity) || 0,
+        };
+      })
+      .filter((item) => item.size && item.quantity > 0);
   };
 
   // Get available sizes with quantities
   const availableSizes = React.useMemo(() => {
     // For shirting category, sizes might not be applicable
     if (isShirtingCategory) return [];
-    
+
     // Handle both new format and backward compatibility
     let sizesString = "";
-    
+
     if (productDetails?.sizes) {
       sizesString = productDetails.sizes;
     } else {
       // Backward compatibility with tshirtSizes and pantSizes
-      const tshirtSizes = productDetails?.tshirtSizes && productDetails.tshirtSizes !== "-" ? productDetails.tshirtSizes : "";
-      const pantSizes = productDetails?.pantSizes && productDetails.pantSizes !== "-" ? productDetails.pantSizes : "";
-      
+      const tshirtSizes =
+        productDetails?.tshirtSizes && productDetails.tshirtSizes !== "-"
+          ? productDetails.tshirtSizes
+          : "";
+      const pantSizes =
+        productDetails?.pantSizes && productDetails.pantSizes !== "-"
+          ? productDetails.pantSizes
+          : "";
+
       if (tshirtSizes && pantSizes) {
         sizesString = `${tshirtSizes},${pantSizes}`;
       } else if (tshirtSizes) {
@@ -82,13 +110,13 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
         sizesString = pantSizes;
       }
     }
-    
+
     return parseSizes(sizesString);
   }, [productDetails, isShirtingCategory]);
 
   // Check if sizes are available
   const hasSizes = availableSizes.length > 0;
-  
+
   useEffect(() => {
     if (productDetails) {
       setSlideIdx(0);
@@ -98,7 +126,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
       dispatch(getProductReviews(productDetails._id));
     }
   }, [productDetails, dispatch, hasSizes]);
-  
+
   if (!productDetails) return null;
 
   const nextSlide = () => {
@@ -114,12 +142,13 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
   };
 
   const handleImageError = (index) => {
-    setImageError(prev => ({ ...prev, [index]: true }));
+    setImageError((prev) => ({ ...prev, [index]: true }));
   };
 
   const averageRating =
     productReviews && productReviews.length > 0
-      ? productReviews.reduce((sum, r) => sum + r.reviewValue, 0) / productReviews.length
+      ? productReviews.reduce((sum, r) => sum + r.reviewValue, 0) /
+        productReviews.length
       : 0;
 
   const handleDialogClose = () => {
@@ -139,7 +168,11 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
 
   const handleAddReview = () => {
     if (rating === 0) {
-      toast("Please provide a star rating.", { icon: "❌", duration: 2000, position: "top-center" });
+      toast("Please provide a star rating.", {
+        icon: "❌",
+        duration: 2000,
+        position: "top-center",
+      });
       return;
     }
     dispatch(
@@ -153,30 +186,38 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
     ).then((data) => {
       if (data.payload && data.payload.success) {
         dispatch(getProductReviews(productDetails._id));
-        toast("Review added successfully!", { icon: "✅", duration: 2000, position: "top-center" });
+        toast("Review added successfully!", {
+          icon: "✅",
+          duration: 2000,
+          position: "top-center",
+        });
         setRating(0);
         setReviewMsg("");
       } else {
-        toast("You either haven't purchased or already reviewed this product.", {
-          icon: "❌",
-          duration: 3000,
-          position: "top-center",
-        });
+        toast(
+          "You either haven't purchased or already reviewed this product.",
+          {
+            icon: "❌",
+            duration: 3000,
+            position: "top-center",
+          }
+        );
       }
     });
   };
 
-  // Get selected size quantity
+  // FIXED: Get selected size quantity for validation only
   const getSelectedSizeQuantity = () => {
     if (!size || size === "-") return 0;
-    const selectedSizeObj = availableSizes.find(s => s.size === size);
+    const selectedSizeObj = availableSizes.find((s) => s.size === size);
     return selectedSizeObj ? selectedSizeObj.quantity : 0;
   };
 
   // Handle meters input change
   const handleMetersChange = (e) => {
     const value = parseFloat(e.target.value);
-    if (value > 0 && value <= 100) { // Set reasonable limits
+    if (value > 0 && value <= 100) {
+      // Set reasonable limits
       setMeters(value);
     } else if (e.target.value === "") {
       setMeters(1);
@@ -213,7 +254,9 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
           alt={`${productDetails?.title} - Image ${slideIdx + 1}`}
           className="w-full h-full object-cover object-top"
           onError={() => handleImageError(slideIdx)}
-          onLoad={() => setImageError(prev => ({ ...prev, [slideIdx]: false }))}
+          onLoad={() =>
+            setImageError((prev) => ({ ...prev, [slideIdx]: false }))
+          }
         />
       </div>
     );
@@ -231,7 +274,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
             className="relative rounded-lg overflow-hidden shadow-lg"
           >
             <ImageDisplay />
-            
+
             {hasValidImages && images.length > 1 && (
               <>
                 <button
@@ -248,7 +291,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
                 >
                   <ChevronRight size={16} className="md:w-5 md:h-5" />
                 </button>
-                
+
                 {/* Image indicators */}
                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
                   {images.map((_, index) => (
@@ -256,7 +299,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
                       key={index}
                       onClick={() => setSlideIdx(index)}
                       className={`w-2 h-2 rounded-full transition-colors ${
-                        index === slideIdx ? 'bg-white' : 'bg-gray-400'
+                        index === slideIdx ? "bg-white" : "bg-gray-400"
                       }`}
                       aria-label={`Go to image ${index + 1}`}
                     />
@@ -269,28 +312,40 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
           {/* Product Details Section */}
           <div className="flex flex-col gap-3 md:gap-4">
             <DialogTitle className="text-xl md:text-3xl font-bold leading-tight">
-              {productDetails?.title || 'Untitled Product'}
+              {productDetails?.title || "Untitled Product"}
             </DialogTitle>
 
             <div className="flex flex-col sm:flex-row gap-2 md:gap-4 text-sm md:text-base text-gray-400">
-              <span><strong>Category:</strong> {productDetails?.category || 'N/A'}</span>
-              <span><strong>Brand:</strong> {productDetails?.brand || 'N/A'}</span>
+              <span>
+                <strong>Category:</strong> {productDetails?.category || "N/A"}
+              </span>
+              <span>
+                <strong>Brand:</strong> {productDetails?.brand || "N/A"}
+              </span>
             </div>
 
             <div className="flex items-baseline gap-2">
               {productDetails?.sellPrice > 0 && (
                 <span className="text-green-400 font-bold text-lg md:text-xl">
                   ₹{productDetails.sellPrice}.00
-                  {isShirtingCategory && <span className="text-sm text-gray-400 ml-1">per meter</span>}
+                  {isShirtingCategory && (
+                    <span className="text-sm text-gray-400 ml-1">
+                      per meter
+                    </span>
+                  )}
                 </span>
               )}
               <span
                 className={`${
-                  productDetails?.sellPrice > 0 ? "line-through text-gray-500" : ""
+                  productDetails?.sellPrice > 0
+                    ? "line-through text-gray-500"
+                    : ""
                 } text-base md:text-lg`}
               >
                 ₹{productDetails?.price || 0}.00
-                {isShirtingCategory && <span className="text-sm text-gray-400 ml-1">per meter</span>}
+                {isShirtingCategory && (
+                  <span className="text-sm text-gray-400 ml-1">per meter</span>
+                )}
               </span>
             </div>
 
@@ -298,11 +353,18 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
             {isShirtingCategory && totalCost && (
               <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-orange-300 font-medium">Total Cost:</span>
-                  <span className="text-orange-400 font-bold text-xl">₹{totalCost.toFixed(2)}</span>
+                  <span className="text-orange-300 font-medium">
+                    Total Cost:
+                  </span>
+                  <span className="text-orange-400 font-bold text-xl">
+                    ₹{totalCost.toFixed(2)}
+                  </span>
                 </div>
                 <p className="text-orange-200/70 text-xs mt-1">
-                  {meters} meter{meters !== 1 ? 's' : ''} × ₹{productDetails?.sellPrice > 0 ? productDetails.sellPrice : productDetails?.price || 0}
+                  {meters} meter{meters !== 1 ? "s" : ""} × ₹
+                  {productDetails?.sellPrice > 0
+                    ? productDetails.sellPrice
+                    : productDetails?.price || 0}
                 </p>
               </div>
             )}
@@ -311,17 +373,20 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
             <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 p-3 md:p-4 rounded-lg border border-blue-800/30">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-1 h-4 bg-blue-400 rounded-full"></div>
-                <span className="text-blue-300 font-medium text-sm md:text-base">Description</span>
+                <span className="text-blue-300 font-medium text-sm md:text-base">
+                  Description
+                </span>
               </div>
               <p className="text-gray-200 text-sm md:text-base leading-relaxed">
-                {productDetails?.description || 'No description available'}
+                {productDetails?.description || "No description available"}
               </p>
             </div>
 
             <div className="flex items-center gap-2">
               <StarRatingComponent rating={averageRating} />
               <span className="text-yellow-300 text-sm md:text-base">
-                {averageRating.toFixed(1)} ({productReviews?.length || 0} reviews)
+                {averageRating.toFixed(1)} ({productReviews?.length || 0}{" "}
+                reviews)
               </span>
             </div>
 
@@ -374,7 +439,9 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
               <div className="space-y-3">
                 {hasSizes ? (
                   <div className="space-y-2">
-                    <Label className="text-white font-semibold text-sm md:text-base">Available Sizes:</Label>
+                    <Label className="text-white font-semibold text-sm md:text-base">
+                      Available Sizes:
+                    </Label>
                     <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-3 lg:grid-cols-4 gap-2">
                       {availableSizes.map(({ size: sizeOption, quantity }) => (
                         <motion.button
@@ -382,17 +449,21 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
                           onClick={() => setSize(sizeOption)}
                           className={`p-2 md:p-3 rounded-lg border-2 transition-all duration-200 ${
                             size === sizeOption
-                              ? 'border-blue-500 bg-blue-600/20 text-blue-300'
-                              : 'border-gray-600 bg-gray-700/50 hover:border-gray-500'
+                              ? "border-blue-500 bg-blue-600/20 text-blue-300"
+                              : "border-gray-600 bg-gray-700/50 hover:border-gray-500"
                           }`}
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
                           <div className="flex flex-col items-center">
-                            <span className="font-semibold text-sm md:text-base">{sizeOption}</span>
+                            <span className="font-semibold text-sm md:text-base">
+                              {sizeOption}
+                            </span>
                             <div className="flex items-center gap-1 mt-1">
                               <Package className="w-2.5 h-2.5 md:w-3 md:h-3" />
-                              <span className="text-xs text-gray-400">{quantity}</span>
+                              <span className="text-xs text-gray-400">
+                                {quantity}
+                              </span>
                             </div>
                           </div>
                         </motion.button>
@@ -401,8 +472,13 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
                     {size && size !== "-" && (
                       <div className="p-2 md:p-3 bg-gray-700/50 rounded-lg">
                         <p className="text-xs md:text-sm text-gray-300">
-                          Selected size: <span className="font-semibold text-white">{size}</span>
-                          <span className="text-gray-400 ml-2">({getSelectedSizeQuantity()} available)</span>
+                          Selected size:{" "}
+                          <span className="font-semibold text-white">
+                            {size}
+                          </span>
+                          <span className="text-gray-400 ml-2">
+                            ({getSelectedSizeQuantity()} available)
+                          </span>
                         </p>
                       </div>
                     )}
@@ -416,22 +492,36 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
               </div>
             )}
 
-            {/* Add to Cart Button */}
+            {/* FIXED: Add to Cart Button */}
             <div className="mt-2">
               {!productDetails?.quantity || productDetails.quantity === 0 ? (
-                <Button disabled className="w-full opacity-50 cursor-not-allowed h-10 md:h-12 text-sm md:text-base">
+                <Button
+                  disabled
+                  className="w-full opacity-50 cursor-not-allowed h-10 md:h-12 text-sm md:text-base"
+                >
                   Out of Stock
                 </Button>
               ) : !isShirtingCategory && hasSizes && (!size || size === "-") ? (
-                <Button disabled className="w-full opacity-50 cursor-not-allowed h-10 md:h-12 text-sm md:text-base">
+                <Button
+                  disabled
+                  className="w-full opacity-50 cursor-not-allowed h-10 md:h-12 text-sm md:text-base"
+                >
                   Please select a size
                 </Button>
-              ) : !isShirtingCategory && hasSizes && getSelectedSizeQuantity() === 0 ? (
-                <Button disabled className="w-full opacity-50 cursor-not-allowed h-10 md:h-12 text-sm md:text-base">
+              ) : !isShirtingCategory &&
+                hasSizes &&
+                getSelectedSizeQuantity() === 0 ? (
+                <Button
+                  disabled
+                  className="w-full opacity-50 cursor-not-allowed h-10 md:h-12 text-sm md:text-base"
+                >
                   Selected size out of stock
                 </Button>
               ) : isShirtingCategory && (!meters || meters <= 0) ? (
-                <Button disabled className="w-full opacity-50 cursor-not-allowed h-10 md:h-12 text-sm md:text-base">
+                <Button
+                  disabled
+                  className="w-full opacity-50 cursor-not-allowed h-10 md:h-12 text-sm md:text-base"
+                >
                   Please enter valid meters
                 </Button>
               ) : (
@@ -439,17 +529,31 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
                   onClick={() => {
                     if (isShirtingCategory) {
                       // For shirting, pass totalCost and meters
-                      handleAddToCart(productDetails._id, productDetails.quantity, size || "-", totalCost , meters);
+                      handleAddToCart(
+                        productDetails._id,
+                        productDetails.quantity, // Total stock for validation
+                        size || "-",
+                        totalCost,
+                        meters
+                      );
                     } else {
-                      // For other categories, use existing logic
-                      handleAddToCart(productDetails._id, hasSizes ? getSelectedSizeQuantity() : productDetails.quantity, size);
+                      // FIXED: For other categories, always pass 1 as quantity to add
+                      handleAddToCart(
+                        productDetails._id,
+                        1, // FIXED: Always add quantity 1
+                        size || "-", // Selected size
+                        null, // No total cost for non-shirting
+                        null  // No meters for non-shirting
+                      );
                     }
                   }}
                   className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 h-10 md:h-12 text-sm md:text-base"
                   disabled={!productDetails._id}
                 >
                   <ShoppingCart size={16} className="md:w-5 md:h-5" />
-                  {checkItemInCart(productDetails._id) ? "Added to Cart" : "Add to Cart"}
+                  {checkItemInCart(productDetails._id)
+                    ? "Added to Cart"
+                    : "Add to Cart"}
                 </Button>
               )}
             </div>
@@ -458,32 +562,45 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
 
             {/* Reviews Section */}
             <div>
-              <h2 className="text-base md:text-lg font-bold mb-3 md:mb-4">Customer Reviews</h2>
+              <h2 className="text-base md:text-lg font-bold mb-3 md:mb-4">
+                Customer Reviews
+              </h2>
               <div className="max-h-40 md:max-h-48 overflow-auto space-y-3 md:space-y-4">
                 {productReviews && productReviews.length > 0 ? (
                   productReviews.map((review, idx) => (
-                    <div key={idx} className="flex gap-2 md:gap-3 pb-2 md:pb-3 border-b border-gray-600 last:border-b-0">
+                    <div
+                      key={idx}
+                      className="flex gap-2 md:gap-3 pb-2 md:pb-3 border-b border-gray-600 last:border-b-0"
+                    >
                       <Avatar className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0">
                         <AvatarFallback className="text-gray-700 font-extrabold text-sm md:text-xl bg-gray-300">
-                          {review.userName ? review.userName.charAt(0).toUpperCase() : 'U'}
+                          {review.userName
+                            ? review.userName.charAt(0).toUpperCase()
+                            : "U"}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start">
                           <h3 className="font-semibold capitalize text-sm md:text-base truncate">
-                            {review.userName || 'Anonymous'}
+                            {review.userName || "Anonymous"}
                           </h3>
                           <span className="text-xs md:text-sm text-gray-400 flex-shrink-0 ml-2">
-                            {review.updatedAt ? new Date(review.updatedAt).toLocaleDateString() : 'N/A'}
+                            {review.updatedAt
+                              ? new Date(review.updatedAt).toLocaleDateString()
+                              : "N/A"}
                           </span>
                         </div>
                         <div className="scale-75 md:scale-100 origin-left">
-                          <StarRatingComponent rating={review.reviewValue || 0} />
+                          <StarRatingComponent
+                            rating={review.reviewValue || 0}
+                          />
                         </div>
                         {review.reviewMessage && (
                           <div className="mt-1 md:mt-2">
                             <MessageSquareMore className="w-3 h-3 md:w-4 md:h-4 text-gray-400 inline mr-1" />
-                            <p className="text-gray-300 inline text-xs md:text-sm">{review.reviewMessage}</p>
+                            <p className="text-gray-300 inline text-xs md:text-sm">
+                              {review.reviewMessage}
+                            </p>
                           </div>
                         )}
                       </div>
@@ -499,11 +616,18 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
               {/* Add Review Section */}
               {user && (
                 <div className="mt-4 md:mt-6 space-y-3 p-3 md:p-4 bg-gray-700 rounded-lg">
-                  <Label className="text-white font-semibold text-sm md:text-base">Write a Review</Label>
+                  <Label className="text-white font-semibold text-sm md:text-base">
+                    Write a Review
+                  </Label>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs md:text-sm text-gray-300">Rating:</span>
+                    <span className="text-xs md:text-sm text-gray-300">
+                      Rating:
+                    </span>
                     <div className="scale-75 md:scale-100 origin-left">
-                      <StarRatingComponent rating={rating} handleRatingChange={(r) => setRating(r)} />
+                      <StarRatingComponent
+                        rating={rating}
+                        handleRatingChange={(r) => setRating(r)}
+                      />
                     </div>
                   </div>
                   <Input
@@ -512,8 +636,8 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails, handleAddToCart }
                     placeholder="Share your experience with this product..."
                     className="bg-gray-600 border-gray-500 text-sm md:text-base"
                   />
-                  <Button 
-                    onClick={handleAddReview} 
+                  <Button
+                    onClick={handleAddReview}
                     disabled={!reviewMsg.trim() || rating === 0}
                     className="w-full bg-green-600 hover:bg-green-700 h-9 md:h-10 text-sm md:text-base"
                   >

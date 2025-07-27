@@ -58,7 +58,7 @@ import Sambodhi from "../../assets/brands/sambodhi.webp";
 import Siyarams from "../../assets/brands/siyarams.webp";
 import Solino from "../../assets/brands/solino.jpeg";
 import LinonFeel from "../../assets/brands/Linon-Feel.jpg";
-// import Manwill from "../../assets/brands/manwill.webp";
+import Manwill from "../../assets/brands/manwill.webp";
 import RamRaj from "../../assets/brands/ramraj.webp";
 import UrbanInspire from "../../assets/brands/urban-inspire.jpg";
 
@@ -75,14 +75,14 @@ import { PiPantsLight } from "react-icons/pi";
 
 const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false); // Add animation control
+  const [hasAnimated, setHasAnimated] = useState(false);
   const dispatch = useDispatch();
   const { productList, productDetails } = useSelector(
     (state) => state.shoppingProducts
   );
   const { featureImageList } = useSelector((state) => state.commonFeatureImage);
   const slides = featureImageList;
-  const [openDetailsDailog, setOpenDetailsDailog] = useState(false);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
@@ -126,17 +126,6 @@ const ShoppingHome = () => {
     ],
     []
   );
-
-  // const popularBrands = React.useMemo(
-  //   () => [
-  //     { id: "jockey", label: "Jockey", icon: Fan, image: Jockey },
-  //     { id: "raymond", label: "Raymond", icon: Castle, image: Raymond },
-  //     { id: "siyaram", label: "Siyaram", icon: Shirt, image: Siyarams },
-  //     { id: "massey", label: "Massey", icon: ShoppingBag, image: Massey },
-  //     { id: "ramraj", label: "RamRaj", icon: LandPlot, image: RamRaj },
-  //   ],
-  //   []
-  // );
 
   const services = React.useMemo(
     () => [
@@ -222,6 +211,7 @@ const ShoppingHome = () => {
   const handleGetProductDetails = React.useCallback(
     (productId) => {
       dispatch(fetchProductDetails(productId));
+      console.log("fromhomePD",productDetails)
     },
     [dispatch]
   );
@@ -229,8 +219,9 @@ const ShoppingHome = () => {
   const handleAddToCart = React.useCallback(
     (productId, quantity, size, totalCost = null, meters = null) => {
       // Get product details to check category
-      const product = productList.find(p => p._id === productId);
-      const isShirtingProduct = product?.category === 'men-shirting';
+      console.log("cartfromhome", quantity);
+      const product = productList.find((p) => p._id === productId);
+      const isShirtingProduct = product?.category === "men-shirting";
 
       // For shirting products, validate meters instead of size
       if (isShirtingProduct) {
@@ -272,19 +263,19 @@ const ShoppingHome = () => {
           position: "top-center",
           style: { backgroundColor: "black", color: "white" },
         });
-        
+
         // Store pending cart item with appropriate data structure
         const pendingItem = {
           productId,
-          quantity: isShirtingProduct ? 1 : (quantity || 1),
+          quantity: isShirtingProduct ? 1 : quantity || 1,
           size: isShirtingProduct ? "-" : size,
         };
-        
+
         if (isShirtingProduct) {
           pendingItem.totalCost = totalCost;
           pendingItem.meters = meters;
         }
-        
+
         sessionStorage.setItem("pendingCartItem", JSON.stringify(pendingItem));
         navigate("/auth/login");
         return;
@@ -294,8 +285,8 @@ const ShoppingHome = () => {
       const cartData = {
         userId: user?.id,
         productId,
-        quantity: isShirtingProduct ? 1 : (quantity || 1),
-        size: isShirtingProduct ? "-" : (size || "-"),
+        quantity: isShirtingProduct ? 1 : quantity || 1,
+        size: isShirtingProduct ? "-" : size || "-",
       };
 
       // Add shirting-specific fields
@@ -322,16 +313,20 @@ const ShoppingHome = () => {
     [dispatch, isAuthenticated, user?.id, navigate, productList]
   );
 
+  // FIXED: Combined the productDetails effect to prevent loops
   useEffect(() => {
     if (productDetails !== null) {
-      setOpenDetailsDailog(true);
+      setOpenDetailsDialog(true);
     }
   }, [productDetails]);
 
-  useEffect(() => {
-    return () => {
-      dispatch(setProductDetails());
-    };
+  // FIXED: Handle dialog close and cleanup
+  const handleDialogClose = React.useCallback(() => {
+    setOpenDetailsDialog(false);
+    // Clear product details after a small delay to allow smooth closing animation
+    setTimeout(() => {
+      dispatch(setProductDetails(null));
+    }, 300);
   }, [dispatch]);
 
   const handleNavigateToListingPage = React.useCallback(
@@ -462,10 +457,9 @@ const ShoppingHome = () => {
       <div className="relative w-full h-48 md:h-80 lg:h-[600px] overflow-hidden ">
         {slides && slides.length > 0
           ? slides.map((slide, index) => (
-              <a href="listing">
+              <a href="listing" key={index}>
                 <img
                   src={slide?.image}
-                  key={index}
                   className={`absolute w-full h-full object-cover transition-opacity duration-1000 ${
                     index === currentSlide ? "opacity-100" : "opacity-0"
                   }`}
@@ -709,8 +703,8 @@ const ShoppingHome = () => {
 
       <ProductDetailsDailog
         handleAddToCart={handleAddToCart}
-        open={openDetailsDailog}
-        setOpen={setOpenDetailsDailog}
+        open={openDetailsDialog}
+        setOpen={handleDialogClose}
         productDetails={productDetails}
       />
 

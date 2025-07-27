@@ -53,8 +53,9 @@ const UserCartItemsContent = ({ cartItem }) => {
 
       if (indexOfCurrentItem > -1) {
         const totalStock = productList[indexOfCurrentItem].quantity;
+        const newQuantity = getCartItem.quantity + quantityChange;
 
-        if (getCartItem.quantity + quantityChange > totalStock) {
+        if (newQuantity > totalStock) {
           toast(`Only ${totalStock} items available in stock`, {
             icon: "⚠️",
             duration: 3000,
@@ -70,6 +71,12 @@ const UserCartItemsContent = ({ cartItem }) => {
       }
     }
 
+    // Prevent quantity from going below 1
+    const newQuantity = getCartItem.quantity + quantityChange;
+    if (newQuantity < 1) {
+      return;
+    }
+
     setIsUpdating(true);
 
     // For shirting products, don't change quantity (always 1), but this shouldn't be called
@@ -82,7 +89,7 @@ const UserCartItemsContent = ({ cartItem }) => {
       updateCartItemQuantity({
         userId: user?.id,
         productId: getCartItem.productId,
-        quantity: getCartItem.quantity + quantityChange,
+        quantity: newQuantity,
       })
     ).then((response) => {
       if (response.payload?.success) {
@@ -204,12 +211,43 @@ const UserCartItemsContent = ({ cartItem }) => {
     </div>
   );
 
-  // Calculate item total - use totalCost for shirting, otherwise calculate normally
-  const itemTotal =
-    isShirtingProduct && cartItem?.totalCost
-      ? cartItem.totalCost
-      : (cartItem?.sellPrice > 0 ? cartItem?.sellPrice : cartItem?.price) *
-        cartItem?.quantity;
+  // Calculate item total - Fixed price calculation
+  const getItemPrice = () => {
+    // For shirting products, use totalCost if available
+    if (isShirtingProduct) {
+      return cartItem?.totalCost || 0;
+    }
+
+    // For regular products, use sellPrice if available and greater than 0, otherwise use price
+    const unitPrice =
+      (cartItem?.sellPrice && cartItem.sellPrice > 0)
+        ? cartItem.sellPrice
+        : cartItem?.price || 0;
+
+    // Ensure quantity is valid
+    const quantity = cartItem?.quantity || 1;
+
+    return unitPrice * quantity;
+  };
+
+  const itemTotal = getItemPrice();
+
+  // Get unit price for display
+  const getUnitPrice = () => {
+    if (isShirtingProduct) {
+      return cartItem?.totalCost || 0;
+    }
+    return (cartItem?.sellPrice && cartItem.sellPrice > 0)
+      ? cartItem.sellPrice
+      : cartItem?.price || 0;
+  };
+
+  const unitPrice = getUnitPrice();
+  const originalPrice = cartItem?.price || 0;
+  const isOnSale =
+    !isShirtingProduct &&
+    cartItem?.sellPrice > 0 &&
+    cartItem.sellPrice < cartItem.price;
 
   return (
     <motion.div
@@ -271,6 +309,21 @@ const UserCartItemsContent = ({ cartItem }) => {
                 </div>
               )}
 
+              {/* Unit price display for regular products */}
+              {!isShirtingProduct && (
+                <div className="flex items-center gap-1 mb-1">
+                  <span className="text-xs text-gray-400">Price:</span>
+                  <span className="text-green-400 text-xs font-medium">
+                    ₹{unitPrice.toFixed(2)}
+                    {isOnSale && (
+                      <span className="text-gray-400 line-through ml-1">
+                        ₹{originalPrice.toFixed(2)}
+                      </span>
+                    )}
+                  </span>
+                </div>
+              )}
+
               {/* Quantity Controls - Only for non-shirting products */}
               {!isShirtingProduct && (
                 <div className="flex items-center gap-1 sm:gap-2">
@@ -285,7 +338,7 @@ const UserCartItemsContent = ({ cartItem }) => {
                     </Button>
 
                     <div className="py-1 font-bold text-gray-100 bg-gray-800/70 text-xs sm:text-sm text-center min-w-[2rem] sm:min-w-[2.5rem]">
-                      {cartItem.quantity}
+                      {cartItem.quantity || 1}
                     </div>
 
                     <Button
@@ -326,20 +379,20 @@ const UserCartItemsContent = ({ cartItem }) => {
 
             {/* Right side - Price and Actions */}
             <div className="flex items-end justify-between gap-2 sm:gap-2 flex-shrink-0">
-              {/* Price */}
-              <div className="flex gap-1 items-center text-right">
+              {/* Total Price */}
+              <div className="flex flex-col items-end text-right">
                 <p className="text-green-400 font-bold text-sm sm:text-base">
-                  ₹{Math.floor(itemTotal)}
+                  ₹{itemTotal.toFixed(2)}
                 </p>
-                {!isShirtingProduct &&
-                  cartItem.sellPrice > 0 &&
-                  cartItem.sellPrice < cartItem.price && (
-                    <p className="text-gray-400 text-xs line-through">
-                      ₹{(cartItem.price * cartItem.quantity).toFixed(2)}
-                    </p>
-                  )}
+                {!isShirtingProduct && (
+                  <p className="text-xs text-gray-400">
+                    ₹{unitPrice.toFixed(2)} × {cartItem.quantity || 1}
+                  </p>
+                )}
                 {isShirtingProduct && (
-                  <p className="text-xs text-gray-400">({cartItem.meters}m)</p>
+                  <p className="text-xs text-gray-400">
+                    {cartItem.meters}m total
+                  </p>
                 )}
               </div>
 
@@ -374,6 +427,21 @@ const UserCartItemsContent = ({ cartItem }) => {
               </div>
             )}
 
+            {/* Unit Price for non-shirting products */}
+            {!isShirtingProduct && (
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-sm text-gray-400">Unit Price:</span>
+                <span className="text-green-400 font-medium">
+                  ₹{unitPrice.toFixed(2)}
+                  {isOnSale && (
+                    <span className="text-gray-400 line-through ml-2">
+                      ₹{originalPrice.toFixed(2)}
+                    </span>
+                  )}
+                </span>
+              </div>
+            )}
+
             {/* Meters for shirting products */}
             {isShirtingProduct && cartItem.meters && (
               <div className="flex items-center gap-2 mb-2">
@@ -404,7 +472,7 @@ const UserCartItemsContent = ({ cartItem }) => {
                   </Button>
 
                   <div className="p-1 font-bold text-gray-100 bg-gray-800/70 text-base text-center min-w-[3rem]">
-                    {cartItem.quantity}
+                    {cartItem.quantity || 1}
                   </div>
 
                   <Button
@@ -444,18 +512,16 @@ const UserCartItemsContent = ({ cartItem }) => {
               </div>
             )}
 
-            {/* Price */}
+            {/* Total Price */}
             <div className="text-right">
               <p className="text-green-400 font-semibold text-lg mb-1">
-                ₹{Math.floor(itemTotal)}
+                ₹{itemTotal.toFixed(2)}
               </p>
-              {!isShirtingProduct &&
-                cartItem.sellPrice > 0 &&
-                cartItem.sellPrice < cartItem.price && (
-                  <p className="text-gray-400 text-sm line-through">
-                    ₹{(cartItem.price * cartItem.quantity).toFixed(2)}
-                  </p>
-                )}
+              {!isShirtingProduct && (
+                <p className="text-gray-400 text-sm">
+                  ₹{unitPrice.toFixed(2)} × {cartItem.quantity || 1}
+                </p>
+              )}
               {isShirtingProduct && (
                 <p className="text-gray-400 text-sm">
                   {cartItem.meters}m × ₹
