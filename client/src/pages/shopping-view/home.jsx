@@ -600,7 +600,7 @@ const ShoppingHome = () => {
 
         <div className="md:hidden overflow-x-auto scrollbar-hide">
           <div className="flex gap-2 pb-2" style={{ width: "max-content" }}>
-            {MenPantProducts.map((p) => (
+            {MenShirtProducts.map((p) => (
               <div key={p._id} className="flex-shrink-0 min-w-[36vw]">
                 <ShoppingProductTile
                   product={p}
