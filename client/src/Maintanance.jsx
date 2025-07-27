@@ -193,6 +193,9 @@ const Maintenance = () => {
           <p className="text-gray-500 text-sm">
             Thank you for your patience • We appreciate your understanding
           </p>
+          <p className="text-gray-400 text-sm">
+              <a href="https://linktr.ee/Its_VikasA">Developed By Vikas </a>
+            </p>
         </div>
       </div>
     </div>
