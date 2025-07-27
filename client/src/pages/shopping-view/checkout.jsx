@@ -115,8 +115,8 @@ const ShoppingCheckout = () => {
         amount: payload.amount, // paise
         currency: payload.currency, // "INR"
         order_id: payload.razorpayOrderId,
-        name: "Your Store Name",
-        description: "Purchase from your store",
+        name: "Urban Trendz",
+        description: "Purchase from our store",
         handler: async (resp) => {
           try {
             // 3) Capture payment on backend
