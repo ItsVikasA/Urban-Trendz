@@ -187,6 +187,9 @@ const ShoppingFooter = () => {
             <p className="text-gray-400 text-sm">
               © 2025 Urban Trendz. All rights reserved.
             </p>
+            <p className="text-gray-400 text-sm">
+              <a href="https://linktr.ee/Its_VikasA">Developed By Vikas </a>
+            </p>
             <div className="flex gap-6 text-sm">
               <a href="/shop/about/about-us" className="text-gray-400 hover:text-orange-400 transition-colors">
                 About Us
