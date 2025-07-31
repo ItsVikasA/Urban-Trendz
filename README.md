@@ -1,4 +1,3 @@
-Live Link: https://www.urbantrendzmdl.com/
 *MERN eCommerce Platform*
 
 A full-featured, desktop-first responsive eCommerce application built with the MERN stack, offering secure authentication, product management, order lifecycle tracking, payment integration, and a modern UI.
